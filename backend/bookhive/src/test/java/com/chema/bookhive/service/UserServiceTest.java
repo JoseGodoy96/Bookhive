@@ -1,5 +1,6 @@
 package com.chema.bookhive.service;
 
+import com.chema.bookhive.exception.UserNotFoundException;
 import com.chema.bookhive.exception.UsernameAlreadyExistsException;
 import com.chema.bookhive.model.User;
 import com.chema.bookhive.repository.UserRepository;
@@ -41,5 +42,40 @@ public class UserServiceTest {
         assertThat(result.getUsername()).isEqualTo("chema");
         assertThat(result.getEmail()).isEqualTo("chema@example.com");
         verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    void findByUsername_returnsUser_whenExists() {
+        User existingUser = new User();
+        existingUser.setUsername("chema");
+        existingUser.setEmail("chema@example.com");
+
+        when(userRepository.findByUsername("chema")).thenReturn(Optional.of(existingUser));
+
+        User result = userService.findByUsername("chema");
+
+        assertThat(result.getUsername()).isEqualTo("chema");
+        assertThat(result.getEmail()).isEqualTo("chema@example.com");
+    }
+
+    @Test
+    void createUser_throwsException_whenUsernameAlreadyExists() {
+        User existingUser = new User();
+        existingUser.setUsername("chema");
+
+        when(userRepository.findByUsername("chema")).thenReturn(Optional.of(existingUser));
+
+        assertThatThrownBy(() -> userService.createUser("chema", "chema@example.com", "pass1234"))
+                .isInstanceOf(UsernameAlreadyExistsException.class)
+                .hasMessageContaining("chema");
+    }
+
+    @Test
+    void findByUsername_throwsException_whenUserDoesNotExist() {
+        when(userRepository.findByUsername("chema")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> userService.findByUsername("chema"))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("chema");
     }
 }
