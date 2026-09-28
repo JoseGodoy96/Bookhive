@@ -4,7 +4,8 @@ import com.chema.bookhive.exception.UserNotFoundException;
 import com.chema.bookhive.exception.UsernameAlreadyExistsException;
 import com.chema.bookhive.model.User;
 import com.chema.bookhive.repository.UserRepository;
-import org.springframework.transaction.annotation.Transactional;import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
