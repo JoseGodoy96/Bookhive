@@ -1,5 +1,6 @@
 package com.chema.bookhive.service;
 
+import com.chema.bookhive.exception.ShelfNotFoundException;
 import com.chema.bookhive.exception.UserNotFoundException;
 import com.chema.bookhive.model.Book;
 import com.chema.bookhive.model.Shelf;
@@ -33,6 +34,7 @@ public class BookService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
         Shelf shelf = shelfRepository.findById(shelfId)
-                .orElseThrow(() -> new );
+                .orElseThrow(() -> new ShelfNotFoundException("Shelf not found with id: " + shelfId));
+
     }
 }
