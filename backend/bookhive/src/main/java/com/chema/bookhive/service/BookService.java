@@ -1,5 +1,6 @@
 package com.chema.bookhive.service;
 
+import com.chema.bookhive.exception.BookNotFoundException;
 import com.chema.bookhive.exception.ForbiddenOperationException;
 import com.chema.bookhive.exception.ShelfNotFoundException;
 import com.chema.bookhive.exception.UserNotFoundException;
@@ -48,5 +49,21 @@ public class BookService {
         book.setShelf(shelf);
         book.setStatus(BookStatus.TO_READ);
         return bookRepository.save(book);
+    }
+
+    @Transactional(readOnly = true)
+    public Book findByIdAndUser(Long bookId, Long userId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + bookId));
+        if (!book.getUser().getId().equals(userId)) {
+            throw new ForbiddenOperationException("Book " + bookId + " does not belong to user " + userId);
+        }
+        return book;
+    }
+
+    @Transactional
+    public void deleteBook(Long bookId, Long userId) {
+        Book book = findByIdAndUser(bookId, userId);
+        bookRepository.delete(book);
     }
 }
