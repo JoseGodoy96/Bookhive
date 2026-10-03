@@ -20,6 +20,12 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("Username not found: " + username));
     }
 
+    @Transactional(readOnly = true)
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Username not found: " + id));
+    }
+
     @Transactional
     public User createUser(String username, String email, String password) {
         if (userRepository.findByUsername(username).isPresent()) {
