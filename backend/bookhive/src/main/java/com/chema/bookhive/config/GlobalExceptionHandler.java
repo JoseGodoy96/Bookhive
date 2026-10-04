@@ -1,5 +1,6 @@
-package com.chema.bookhive.exception;
+package com.chema.bookhive.config;
 
+import com.chema.bookhive.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
